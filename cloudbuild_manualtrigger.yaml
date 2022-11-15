@@ -1,0 +1,28 @@
+steps: 
+  - name: ubuntu
+    script: |
+      #!/bin/bash
+      echo "Hello World" 
+      echo "test123"
+      file="release.txt"
+      while read -r line; do
+        eachLine=(${line//","/ })
+        echo -e "$line\n"
+        echo -e "$eachLine[0] , $eachLine[1]\n"
+      done <$file 
+      
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: push-manifest
+#    waitFor:
+#      - generate-manifest
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" -d @${_JSONFILE} "$(gcloud beta data-fusion instances describe --location="${_REGION}" --format="value(apiEndpoint)" ${_INSTANCE_ID})/v3/namespaces/default/apps/${_FUSIONPIPELINE}/update"
+options:
+  logging: CLOUD_LOGGING_ONLY
+  dynamic_substitutions: true
+substitutions:
+  _REGION: 'us-west1'
+  _INSTANCE_ID: 'testdatafusionpipeline'

@@ -1,0 +1,8 @@
+{
+  "releases" : 
+  {
+    "DataFusionQuickstartV1":"DataFusionQuickstartV1-cdap-data-pipeline.json", 
+    "DataFusionQuickstartV2":"DataFusionQuickstartV1-cdap-data-pipeline_1.json",  
+    "DataFusionQuickstartV3":"DataFusionQuickstartV1-cdap-data-pipeline_2.json"
+  }
+}

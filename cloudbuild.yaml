@@ -1,0 +1,15 @@
+steps:       
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: push-manifest
+#    waitFor:
+#      - generate-manifest
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" -d @DataFusionQuickstartV1-cdap-data-pipeline.json "$(gcloud beta data-fusion instances describe --location="${_REGION}" --format="value(apiEndpoint)" ${_INSTANCE_ID})/v3/namespaces/default/apps/DataFusionQuickstartV1/update"
+options:
+  logging: CLOUD_LOGGING_ONLY
+substitutions:
+  _REGION: 'us-west1'
+  _INSTANCE_ID: 'testdatafusionpipeline'
