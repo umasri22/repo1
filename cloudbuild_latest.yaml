@@ -1,0 +1,16 @@
+steps: 
+  - name: 'gcr.io/cloud-builders/gcloud'
+    script: |
+     #!/bin/bash
+     echo "Hello World"
+     echo "test123"
+     while read JSONFILE FUSIONPIPELINE
+     do
+      curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" -d @${_JSONFILE} "$(gcloud beta data-fusion instances describe --location=us-east4 --format="value(apiEndpoint)" cdap-edw-etl-dev-01)/v3/namespaces/default/apps/${_FUSIONPIPELINE}/update"
+     done < release.txt
+options:
+      logging: CLOUD_LOGGING_ONLY
+      dynamic_substitutions: true
+substitutions:
+      _REGION: 'us-east4'
+      _INSTANCE_ID: 'cdap-edw-etl-dev-01'
